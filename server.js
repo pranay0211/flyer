@@ -15,64 +15,123 @@ app.use(express.static("public"));
 
 app.get("/api/health", (req, res) => res.json({ ok: true }));
 
-function buildPrompt(body) {
-  return `
-Create a premium A4 portrait promotional flyer for WENY NUTRITION.
+function clean(value) {
+  return String(value || "").trim();
+}
 
-Brand:
+function buildPrompt(body) {
+  const theme = clean(body.theme) || "Surprise premium wellness";
+  const date = clean(body.date);
+  const day = clean(body.day);
+  const joining = clean(body.joining);
+  const happy = clean(body.happy);
+  const emceeName = clean(body.emceeName);
+  const workoutName = clean(body.workoutName);
+  const workoutType = clean(body.workoutType);
+  const knowledgeName = clean(body.knowledgeName);
+  const topic = clean(body.topic);
+
+  return `
+You are one of the world's best creative directors, editorial designers, advertising designers, branding experts and marketing visual designers.
+
+Create a complete PREMIUM, HIGH-END, WHATSAPP READY A4 PORTRAIT FLYER for WENY NUTRITION.
+
+BRAND:
 WENY NUTRITION
 Mind • Body • Soul
 Morning Wellness Club
 Start Your Day. Transform Your Life.
 
-Event Details:
-Date: ${body.date}
-Day: ${body.day}
-Joining Time: ${body.joining}
-Happy Hours: ${body.happy}
+EVENT DETAILS:
+Date: ${date}
+Day: ${day}
+Joining Time: ${joining}
+Happy Hours Time: ${happy}
 
-EMCEE:
-${body.emceeName}
+TEAM DETAILS:
+EMCEE: ${emceeName}
+Workout Trainer: ${workoutName}
+Workout Type: ${workoutType}
+Knowledge Session By: ${knowledgeName}
+Knowledge Session Topic: ${topic}
 
-Workout Trainer:
-${body.workoutName}
-Workout Type: ${body.workoutType}
+SELECTED CREATIVE THEME:
+${theme}
 
-Knowledge Session By:
-${body.knowledgeName}
-Knowledge Topic:
-${body.topic}
+REFERENCE IMAGE INSTRUCTIONS:
+If a reference flyer image is uploaded, use it ONLY for creative inspiration: boldness, premium feel, energy, composition style, visual excitement.
+Do NOT copy the exact design.
+Create a fresh original flyer for WENY Nutrition.
 
-Design Style:
-Create a stylish flyer like a premium wellness brand.
-It should be attractive for customers to join.
-Use strong modern typography, sunrise energy, botanical wellness elements, beautiful cards, icons, premium shadows, and clear readable layout.
-Use the workout type and knowledge topic to decide the creative theme automatically.
-
-Important Photo Instructions:
-Use the uploaded coach photos as exact real people.
-Do not change face, skin tone, age, hairstyle, body, clothing, pose, or expression.
-Do not create AI-looking faces.
-Only clean/remove background if needed and blend into premium flyer cards.
+PHOTO INSTRUCTIONS - EXTREMELY IMPORTANT:
+The uploaded coach photos are real people.
+Use the exact uploaded people.
+Do NOT recreate faces.
+Do NOT beautify faces.
+Do NOT change facial structure.
+Do NOT change hairstyle.
+Do NOT change clothing.
+Do NOT change body shape.
+Do NOT change skin tone.
+Do NOT change age.
+Do NOT change expression.
+Do NOT make AI-looking faces.
+Only remove background if needed, improve lighting/sharpness/contrast, add soft shadow/rim light, and blend them naturally into the flyer.
 The people must remain clearly recognizable.
 
-Layout:
-A4 portrait.
-Top: WENY Nutrition branding and Morning Wellness Club.
-Hero: powerful motivational headline.
-Middle: date, time, happy hours, emcee.
-Coach cards: EMCEE, WORKOUT TRAINER, KNOWLEDGE SESSION.
-Topic highlight section for ${body.topic}.
-Benefits section.
-Footer call to action.
+CREATIVE DIRECTION:
+Make the flyer stylish, exciting, premium, customer-attracting, and professional.
+The flyer should make people stop scrolling on WhatsApp and feel like joining immediately.
+Avoid boring corporate design.
+Avoid PowerPoint look.
+Avoid generic Canva template.
+Avoid clutter.
+Use strong visual hierarchy.
+Use modern typography.
+Use premium gradients.
+Use beautiful lighting.
+Use wellness, fitness, nutrition and community energy.
+Use premium cards, ribbons, depth, shadows, icons and creative shapes.
 
-Text must be spelled exactly.
-No fake names.
-No duplicated coach names.
-No clutter.
-No PowerPoint look.
-No generic Canva template.
-Make it look like a professional ₹50,000 designer flyer.
+AUTO-ADAPTATION:
+Creatively adapt the complete design to the workout type and knowledge topic.
+For workout type "${workoutType}", show movement, fitness, energy, body activation, strength and healthy morning energy.
+For topic "${topic}", create matching premium illustrations and visual cues related to the topic.
+For Essential Minerals, use elegant mineral/nutrition visuals such as calcium, magnesium, zinc, iron, healthy foods, bones, energy and nourishment.
+
+LAYOUT REQUIREMENTS:
+A4 portrait poster composition.
+Top: WENY NUTRITION brand + Morning Wellness Club.
+Hero: powerful motivational headline.
+Middle: premium event info card showing date, day, joining time and happy hours.
+Coach section: three premium coach cards with real uploaded photos.
+Card 1: EMCEE - ${emceeName}
+Card 2: WORKOUT TRAINER - ${workoutName} - Workout Type: ${workoutType}
+Card 3: KNOWLEDGE SESSION - ${knowledgeName} - Topic: ${topic}
+Add a highlighted knowledge/topic section.
+Add benefit icons such as Fitness, Energy, Learning, Positive Mindset, Healthy Community.
+Footer: strong call to action.
+
+TEXT RULES:
+Use only supplied names and supplied event data.
+Do not invent names.
+Do not duplicate names.
+Do not swap coach names.
+Keep spelling exactly:
+${emceeName}
+${workoutName}
+${knowledgeName}
+${topic}
+
+QUALITY TARGET:
+Looks like a ₹50,000 professional graphic designer flyer.
+Premium advertising agency quality.
+Ultra sharp.
+A4 portrait.
+High resolution.
+Social media ready.
+WhatsApp readable.
+Modern, stylish, attractive and unforgettable.
 `;
 }
 
@@ -91,34 +150,37 @@ app.post(
       }
 
       const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-
       const files = [];
 
-      const addFile = async (field, label) => {
+      async function addFile(field, filename) {
         const file = req.files?.[field]?.[0];
         if (!file) return;
         files.push(
-          await toFile(file.buffer, `${label}.png`, {
+          await toFile(file.buffer, filename, {
             type: file.mimetype || "image/png"
           })
         );
-      };
+      }
 
-      await addFile("reference", "reference-style");
-      await addFile("emceePhoto", "emcee-dipa-kansara");
-      await addFile("workoutPhoto", "workout-trainer");
-      await addFile("knowledgePhoto", "knowledge-speaker");
+      await addFile("reference", "reference-style.png");
+      await addFile("emceePhoto", "emcee-photo.png");
+      await addFile("workoutPhoto", "workout-trainer-photo.png");
+      await addFile("knowledgePhoto", "knowledge-speaker-photo.png");
 
-      if (files.length < 3) {
-        return res.status(400).json({
-          error: "Please upload at least 3 coach photos."
-        });
+      const hasAllCoachPhotos =
+        req.files?.emceePhoto?.[0] &&
+        req.files?.workoutPhoto?.[0] &&
+        req.files?.knowledgePhoto?.[0];
+
+      if (!hasAllCoachPhotos) {
+        return res.status(400).json({ error: "Please upload all 3 coach photos." });
       }
 
       const prompt = buildPrompt(req.body);
+      const model = process.env.OPENAI_IMAGE_MODEL || "gpt-image-1";
 
       const result = await client.images.edit({
-        model: process.env.OPENAI_IMAGE_MODEL || "gpt-image-2",
+        model,
         image: files,
         prompt,
         size: "1024x1536",
@@ -130,18 +192,12 @@ app.post(
         return res.status(500).json({ error: "No flyer returned from OpenAI." });
       }
 
-      res.json({
-        image: `data:image/png;base64,${b64}`
-      });
+      res.json({ image: `data:image/png;base64,${b64}` });
     } catch (err) {
       console.error(err);
-      res.status(500).json({
-        error: err?.message || "Flyer generation failed."
-      });
+      res.status(500).json({ error: err?.message || "Flyer generation failed." });
     }
   }
 );
 
-app.listen(port, () => {
-  console.log(`WENY AI flyer app running on port ${port}`);
-});
+app.listen(port, () => console.log(`WENY AI flyer app running on port ${port}`));
