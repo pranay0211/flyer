@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>WENY AI Flyer Generator</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app">
+    <aside class="panel">
+      <h1>WENY Flyer Generator</h1>
+      <p class="hint">GPT creates only background. Your uploaded coach photos stay real and are placed exactly on top.</p>
+
+      <label>Theme
+        <select id="theme">
+          <option>Surprise premium wellness</option>
+          <option>Sunrise Energy</option>
+          <option>Botanical Fresh</option>
+          <option>Luxury Green Gold</option>
+          <option>Ocean Calm</option>
+          <option>Athletic Performance</option>
+          <option>Zen Minimal</option>
+          <option>Vibrant Community</option>
+        </select>
+      </label>
+
+      <div class="grid2">
+        <label>Date <input id="date" value="17-June-2026"></label>
+        <label>Day <input id="day" value="Wednesday"></label>
+      </div>
+      <div class="grid2">
+        <label>Joining Time <input id="joining" value="6:50 AM"></label>
+        <label>Happy Hours <input id="happy" value="7:00 AM - 8:00 AM"></label>
+      </div>
+
+      <h2>EMCEE</h2>
+      <label>Name <input id="emceeName" value="Dipa Kansara"></label>
+      <label>Photo <input id="emceePhoto" type="file" accept="image/*"></label>
+
+      <h2>Workout Trainer</h2>
+      <label>Name <input id="workoutName" value="Shyamlali Kori"></label>
+      <label>Workout Type <input id="workoutType" value="Full Body"></label>
+      <label>Photo <input id="workoutPhoto" type="file" accept="image/*"></label>
+
+      <h2>Knowledge Session</h2>
+      <label>Name <input id="knowledgeName" value="Dhwani Mandaliya"></label>
+      <label>Topic <input id="topic" value="Essential Minerals"></label>
+      <label>Photo <input id="knowledgePhoto" type="file" accept="image/*"></label>
+
+      <div class="buttons">
+        <button id="aiBtn">Generate AI Background</button>
+        <button id="downloadBtn">Download Flyer PNG</button>
+        <button id="resetBgBtn" class="ghost">Use CSS Background</button>
+      </div>
+    </aside>
+
+    <section class="stageWrap">
+      <div id="flyer" class="flyer theme-css">
+        <img id="aiBackground" class="aiBg" alt="" />
+        <div class="overlay">
+          <header class="top">
+            <div>
+              <div class="brand">WENY <span>NUTRITION</span></div>
+              <div class="tag">Mind • Body • Soul</div>
+            </div>
+            <div class="club">Morning<br><b>Wellness Club</b></div>
+          </header>
+
+          <section class="hero">
+            <div class="ribbon">Start Your Day. Transform Your Life.</div>
+            <h1>Healthy Morning<br>Stronger Life</h1>
+            <p>Move • Learn • Grow • Glow</p>
+          </section>
+
+          <section class="infoCard">
+            <div><b>📅 DATE</b><span id="vDate">17-June-2026</span><small id="vDay">Wednesday</small></div>
+            <div><b>🕕 JOINING</b><span id="vJoining">6:50 AM</span></div>
+            <div><b>🎁 HAPPY HOURS</b><span id="vHappy">7:00 AM - 8:00 AM</span></div>
+            <div><b>🎤 EMCEE</b><span id="vEmceeInfo">Dipa Kansara</span></div>
+          </section>
+
+          <section class="cards">
+            <article class="profile pink">
+              <div class="icon">🎤</div>
+              <div class="photoSlot"><img id="vEmceePhoto" alt=""></div>
+              <div class="role">EMCEE</div>
+              <div class="name" id="vEmceeName">Dipa Kansara</div>
+            </article>
+            <article class="profile green">
+              <div class="icon">💪</div>
+              <div class="photoSlot"><img id="vWorkoutPhoto" alt=""></div>
+              <div class="role">WORKOUT TRAINER</div>
+              <div class="name" id="vWorkoutName">Shyamlali Kori</div>
+              <div class="sub" id="vWorkoutType">Workout Type: Full Body</div>
+            </article>
+            <article class="profile purple">
+              <div class="icon">📚</div>
+              <div class="photoSlot"><img id="vKnowledgePhoto" alt=""></div>
+              <div class="role">KNOWLEDGE SESSION</div>
+              <div class="name" id="vKnowledgeName">Dhwani Mandaliya</div>
+              <div class="sub" id="vTopic">Topic: Essential Minerals</div>
+            </article>
+          </section>
+
+          <section class="benefits">
+            <div>🏃<b>Fitness</b></div><div>⚡<b>Energy</b></div><div>🧠<b>Knowledge</b></div><div>🤝<b>Community</b></div><div>🌿<b>Healthy Lifestyle</b></div>
+          </section>
+
+          <footer class="foot">
+            <b>Join Us & Start Your Transformation Today!</b>
+            <span>✓ Be On Time &nbsp; ✓ Stay Hydrated &nbsp; ✓ Camera ON &nbsp; ✓ Positive Mindset</span>
+          </footer>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
